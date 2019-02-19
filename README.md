@@ -55,6 +55,12 @@ make name=http-verbs-test groupid=org.scalatest artifactid=scalatest actualversi
 +  "org.scalatest" %% "scalatest" % "3.0.5",
 ```
 
+## Edge cases
+
+### Libraries with diferent group id but same version
+
+In this case you want to invoke *strict-upgrade* task instead of *upgrade*.
+
 ## Examples
 
 ``` {.example}

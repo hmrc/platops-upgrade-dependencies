@@ -10,18 +10,14 @@ setup: ## clone name repository
 report: ## dependencies report
 	cd $(name) && sbt dependencyUpdatesReport && cat target/dependency-updates.txt
 
-upgrade: ## more agresive bump version
-	cd $(name) && grep -l $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i "s/\"$(actualversion)\"/\"$(version)\"/"
+upgrade: ## upgrade versions
+	cd $(name) && grep -l -s $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i "s/\"$(actualversion)\"/\"$(version)\"/"
 
-upgrade2: ## upgrade version
-ifdef varversion
-		cd $(name) && grep -l $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i "s/% $(varversion)/% \"$(version)\"/"
-else ifdef actualversion
-	cd $(name) && grep -l $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i "s/% \"$(actualversion)\"/% \"$(version)\"/"
-endif
+strict-upgrade: ## upgrade with stricter match for very rare edge cases
+	cd $(name) && grep -l -s com.fasterxml.jackson.core.*jackson-core *.sbt project/*.scala | xargs sed -i -E "s/(\"$(groupid)\")[ ]+([%]{1,2})[ ]+(\"$(artifactid)\").*\"$(actualversion)\"/\1 \2 \3 % \"$(version)\"/"
 
 test: ## run sbt tests
 	cd $(name) && sbt clean test
 
 check: ## match for dependency as group id and artifactid
-	grep $(groupid).*$(artifactid) $(name)/*.sbt $(name)/project/*.scala
+	grep -s $(groupid).*$(artifactid) $(name)/*.sbt $(name)/project/*.scala
