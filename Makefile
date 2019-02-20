@@ -16,6 +16,12 @@ upgrade: ## upgrade versions
 strict-upgrade: ## upgrade with stricter match for very rare edge cases
 	cd $(name) && grep -l -s $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i -E "s/(\"$(groupid)\")[ ]+([%]{1,2})[ ]+(\"$(artifactid)\").*\"$(actualversion)\"/\1 \2 \3 % \"$(version)\"/"
 
+plugin-upgrade: ## upgrade plugin
+	sed -i -E "s/(\"$(groupid)\")[ ]+([%]{1,2})[ ]+(\"$(artifactid)\").*\"$(actualversion)\"/\1 \2 \3 % \"$(version)\"/" $(name)/project/plugins.sbt
+
+diff: ## show git diff
+	cd $(name) && git diff
+
 test: ## run sbt tests
 	cd $(name) && sbt clean test
 
