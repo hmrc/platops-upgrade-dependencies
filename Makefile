@@ -14,7 +14,7 @@ upgrade: ## upgrade versions
 	cd $(name) && grep -l -s $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i "s/\"$(actualversion)\"/\"$(version)\"/"
 
 strict-upgrade: ## upgrade with stricter match for very rare edge cases
-	cd $(name) && grep -l -s com.fasterxml.jackson.core.*jackson-core *.sbt project/*.scala | xargs sed -i -E "s/(\"$(groupid)\")[ ]+([%]{1,2})[ ]+(\"$(artifactid)\").*\"$(actualversion)\"/\1 \2 \3 % \"$(version)\"/"
+	cd $(name) && grep -l -s $(groupid).*$(artifactid) *.sbt project/*.scala | xargs sed -i -E "s/(\"$(groupid)\")[ ]+([%]{1,2})[ ]+(\"$(artifactid)\").*\"$(actualversion)\"/\1 \2 \3 % \"$(version)\"/"
 
 test: ## run sbt tests
 	cd $(name) && sbt clean test
